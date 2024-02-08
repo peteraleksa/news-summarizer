@@ -1,0 +1,95 @@
+schema {
+    query: Query
+}
+
+union Investor = Institution | Person
+union InvestmentAsset = Institution | MediaChannel
+
+type Person {
+    id: ID!
+    fist_name: String!
+    middle_name: String
+    last_name: String!
+    education: [Education]
+    employment_history: [Employment]
+    investments: [Investment]
+}
+
+type Article {
+    id: ID!
+    title: String!
+    summary: String
+    retrieved_url: String!
+    author: [Person]
+    distribution: [Distribution!]
+}
+
+type Distribution {
+    channel: MediaChannel!
+    date: Int!
+    url: String!
+}
+
+type MediaChannel {
+    id: ID!
+    name: String!
+    category: String
+    owned_by: [Investor]
+}
+
+type Institution {
+    id: ID!
+    name: String!
+    category: String!
+    subsidiary_of: Institution
+    subsidiaries: [Institution]
+    current_employees: [Person]
+    former_employees: [Person]
+    current_investors: [Person]
+    former_investors: [Person]
+    current_investments: [InvestmentAsset]
+    former_investments: [InvestmentAsset]
+}
+
+type Education {
+    id: ID!
+    institution: Institution!
+    degree: String
+    start_dt: Int
+    end_dt: Int
+}
+
+type Employment {
+    id: ID!
+    institution: Institution!
+    position: String
+    start_dt: Int
+    end_dt: Int
+}
+
+type Investment {
+    id: ID!
+    investors: [Investor!]
+    assets: [InvestmentAsset!]
+    amount: Float
+    start_dt: Int
+    end_dt: Int
+    notes: String
+}
+
+type ArticleResult {
+    success: Boolean!
+    errors: [String]
+    article: Article
+}
+
+type ArticlesResult {
+    success: Boolean!
+    errors: [String]
+    article: [Article]
+}
+
+type Query {
+    listArticles: ArticlesResult!
+    getPost(id: ID!): ArticleResult!
+}
