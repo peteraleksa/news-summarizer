@@ -2,8 +2,8 @@ schema {
     query: Query
 }
 
-union Investor = Institution | Person
-union InvestmentAsset = Institution | MediaChannel
+union Entity = Organization | Person
+union Asset = Organization | MediaChannel
 
 type Person {
     id: ID!
@@ -18,10 +18,12 @@ type Person {
 type Article {
     id: ID!
     title: String!
+    abstract: String
     summary: String
     retrieved_url: String!
     author: [Person]
     distribution: [Distribution!]
+    mentions: [Entity]
 }
 
 type Distribution {
@@ -34,26 +36,27 @@ type MediaChannel {
     id: ID!
     name: String!
     category: String
-    owned_by: [Investor]
+    owned_by: [Entity]
+    advertisers: [Organization]
 }
 
-type Institution {
+type Organization {
     id: ID!
     name: String!
     category: String!
-    subsidiary_of: Institution
-    subsidiaries: [Institution]
+    subsidiary_of: Organization
+    subsidiaries: [Organization]
     current_employees: [Person]
     former_employees: [Person]
     current_investors: [Person]
     former_investors: [Person]
-    current_investments: [InvestmentAsset]
-    former_investments: [InvestmentAsset]
+    current_investments: [Asset]
+    former_investments: [Asset]
 }
 
 type Education {
     id: ID!
-    institution: Institution!
+    institution: Organization!
     degree: String
     start_dt: Int
     end_dt: Int
@@ -61,7 +64,7 @@ type Education {
 
 type Employment {
     id: ID!
-    institution: Institution!
+    institution: Organization!
     position: String
     start_dt: Int
     end_dt: Int
@@ -69,12 +72,28 @@ type Employment {
 
 type Investment {
     id: ID!
-    investors: [Investor!]
-    assets: [InvestmentAsset!]
+    investors: [Entity!]
+    assets: [Asset!]
     amount: Float
     start_dt: Int
     end_dt: Int
     notes: String
+}
+
+type Position {
+    id: ID!
+    name: String!
+    summary: String!
+    associated_beliefs: [Belief]
+    similar_positions: [Position]
+}
+
+type Belief {
+    id: ID!
+    name: String!
+    summary: String!
+    associated_positions: [Position]
+    similar_beliefs: [Belief]
 }
 
 type ArticleResult {
@@ -91,5 +110,5 @@ type ArticlesResult {
 
 type Query {
     listArticles: ArticlesResult!
-    getPost(id: ID!): ArticleResult!
+    getArticle(id: ID!): ArticleResult!
 }

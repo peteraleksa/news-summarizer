@@ -1,0 +1,28 @@
+{
+  "devDependencies": {
+    "@types/node": "^20.11.17"
+  },
+  "name": "news-summarizer",
+  "description": "",
+  "version": "0.1.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "undici-types": "^5.26.5"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peteraleksa/news-summarizer.git"
+  },
+  "author": "Peter Aleksa",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/peteraleksa/news-summarizer/issues"
+  },
+  "homepage": "https://github.com/peteraleksa/news-summarizer#readme"
+}
