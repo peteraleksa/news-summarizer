@@ -1,0 +1,151 @@
+# noinspection GraphQLMissingType,GraphQLUnresolvedReference
+
+union Entity = Organization | Person
+union Asset = Organization | MediaChannel
+
+interface GraphNode {
+    id: ID!
+}
+
+type Article implements GraphNode {
+    id: ID! @id @unique
+    title: String!
+    abstract: String
+    summary: String
+    retrieved_url: String! @unique
+    author: [Person!]! @relationship(type: "WRITTEN_BY", direction: IN)
+    distribution: [MediaChannel!]! @relationship(type: "DISTRIBUTED_VIA", properties: "DistributionInfo", direction: OUT)
+    mentions: [Entity!]! @relationship(type: "MENTIONED_BY", properties: "MentionInfo", direction: IN)
+    comments: [Comment!]! @relationship(type: "COMMENTS_ON", direction: IN)
+}
+
+type Belief implements GraphNode {
+    id: ID! @id @unique
+    name: String! @unique
+    summary: String!
+    wiki_tag: String
+    associated_positions: [PoliticalPosition!]! @relationship(type: "ASSOCIATED_WITH", properties: "AssociationInfo", direction: IN)
+    similar_beliefs: [Belief!]! @relationship(type: "SIMILAR_TO", properties: "SimilarityInfo", direction: OUT)
+}
+
+type Comment implements GraphNode {
+    id: ID! @id @unique
+    title: String
+    text: String!
+    user: User! @relationship(type: "COMMENT_MADE", direction: IN)
+    platform: MediaChannel! @relationship(type: "COMMENT_VIA", properties: "DistributionInfo", direction: OUT)
+    article: Article! @relationship(type: "COMMENTS_ON", direction: OUT)
+}
+
+type MediaChannel implements GraphNode {
+    id: ID! @id @unique
+    name: String!
+    category: String
+    wiki_tag: String
+    owners: [Entity!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
+#    current_owners: [Entity!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
+#    former_owners: [Entity!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
+    advertisers: [Organization!]! @relationship(type: "ADVERTISES_IN", properties: "AdvertisingInfo", direction: IN)
+    users: [User!]! @relationship(type: "USER_OF", properties: "UserInfo", direction: IN)
+}
+
+type Organization implements GraphNode {
+    id: ID! @id @unique
+    name: String!
+    category: String!
+    wiki_tag: String
+    subsidiary_of: [Organization!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
+    subsidiaries: [Organization!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: OUT)
+    employees: [Person!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: IN)
+    investors: [Person!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: IN)
+    investments: [Asset!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: OUT)
+#    current_employees: [Person!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: IN)
+#    former_employees: [Person!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: IN)
+#    current_investors: [Person!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: IN)
+#    former_investors: [Person!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: IN)
+#    current_investments: [Asset!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: OUT)
+#    former_investments: [Asset!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: OUT)
+}
+
+type Person implements GraphNode {
+    id: ID! @id @unique
+    name: String!
+    aka: [String]
+    emails: [String]
+    dob: Date
+    bio: Text
+    wiki_tag: String
+    affiliations: [Organization!]! @relationship(type: "MEMBER_OF", properties: "MembershipInfo", direction: OUT)
+    education: [Organization!]! @relationship(type: "STUDIED_AT", properties: "EducationInfo", direction: OUT)
+    employment: [Organization!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: OUT)
+    investments: [Asset!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: OUT)
+    user_accounts: [User!]! @relationship(type: "OWNER_OF", properties: "OwnershipInfo", direction: OUT)
+}
+
+type PoliticalPosition implements GraphNode {
+    id: ID! @id @unique
+    name: String! @unique
+    summary: String!
+    wiki_tag: String
+    associated_beliefs: [Belief!]! @relationship(type: "ASSOCIATED_WITH", direction: OUT)
+    similar_positions: [PoliticalPosition!]! @relationship(type: "SIMILAR_TO", direction: OUT)
+}
+
+type User implements GraphNode {
+    id: ID! @id @unique
+    username: String!
+    platform: [MediaChannel!]! @relationship(type: "USER_OF", properties: "UserInfo" direction: OUT)
+    owner: [Entity!]! @relationship(type: "OWNER_OF", properties: "OwnershipInfo", direction: IN)
+}
+
+interface AdvertisingInfo @relationshipProperties {
+    details: String
+}
+
+interface AssociationInfo @relationshipProperties {
+    details: String
+}
+
+interface DistributionInfo @relationshipProperties {
+    date: Int!
+    url: String!
+}
+
+interface EducationInfo @relationshipProperties {
+    degree: String
+    start_dt: Int
+    end_dt: Int
+}
+
+interface EmploymentInfo @relationshipProperties {
+    position: String
+    start_dt: Int
+    end_dt: Int
+}
+
+interface InvestmentInfo @relationshipProperties {
+    amount: Float
+    start_dt: Int
+    end_dt: Int
+    notes: String
+}
+
+interface MentionInfo @relationshipProperties {
+    sentiment: String
+    snippets: [String]
+}
+
+interface OwnershipInfo @relationshipProperties {
+    details: String
+    start_dt: Date
+    end_dt: Date
+}
+
+interface SimilarityInfo @relationshipProperties {
+    details: String
+}
+
+interface UserInfo @relationshipProperties {
+    details: String
+    user_since: Date
+}

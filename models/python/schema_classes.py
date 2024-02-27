@@ -34,10 +34,10 @@ def get_schema_type(fullname: str) -> RecordSchema:
     
 __SCHEMAS = dict((n.fullname.lstrip("."), n) for n in six.itervalues(__NAMES.names))
 
-class nyt_api_topstories_documentClass(DictWrapper):
+class NYTimesApiTopStoriesDocumentClass(DictWrapper):
     # No docs available.
     
-    RECORD_SCHEMA = get_schema_type("data_ingest.nyt_api_topstories_document")
+    RECORD_SCHEMA = get_schema_type("data_ingest.NYTimesApiTopStoriesDocument")
     def __init__(self,
         section: str,
         title: str,
@@ -294,8 +294,8 @@ class nyt_api_topstories_documentClass(DictWrapper):
     
     
 __SCHEMA_TYPES = {
-    'data_ingest.nyt_api_topstories_document': nyt_api_topstories_documentClass,
-    'nyt_api_topstories_document': nyt_api_topstories_documentClass,
+    'data_ingest.NYTimesApiTopStoriesDocument': NYTimesApiTopStoriesDocumentClass,
+    'NYTimesApiTopStoriesDocument': NYTimesApiTopStoriesDocumentClass,
 }
 
 _json_converter = avrojson.AvroJsonConverter(use_logical_types=False, schema_types=__SCHEMA_TYPES)

@@ -201,3 +201,10 @@ dist/**/*
 # ignore yarn.lock
 yarn.lock
 
+# ignore test data
+test/*.txt
+ingest/test/**/*.html
+
+# ignore compiled js
+graphql/**/*.js
+ingest/**/*.js

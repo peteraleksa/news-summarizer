@@ -2,15 +2,15 @@ from typing import cast
 from avrogen.dict_wrapper import DictWrapper
 from .schema_classes import _SCHEMA as get_schema_type
 from .schema_classes import _json_converter as json_converter
-from .schema_classes import nyt_api_topstories_documentClass
+from .schema_classes import NYTimesApiTopStoriesDocumentClass
 from avro.io import DatumReader
 
 
 class SpecificDatumReader(DatumReader):
     SCHEMA_TYPES = {
-        "nyt_api_topstories_document": nyt_api_topstories_documentClass,
-        ".nyt_api_topstories_document": nyt_api_topstories_documentClass,
-        "data_ingest.nyt_api_topstories_document": nyt_api_topstories_documentClass,
+        "NYTimesApiTopStoriesDocument": NYTimesApiTopStoriesDocumentClass,
+        ".NYTimesApiTopStoriesDocument": NYTimesApiTopStoriesDocumentClass,
+        "data_ingest.NYTimesApiTopStoriesDocument": NYTimesApiTopStoriesDocumentClass,
     }
     
     

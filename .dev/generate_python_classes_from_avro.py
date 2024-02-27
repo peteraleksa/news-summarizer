@@ -5,7 +5,7 @@ import json
 input_directory = "./avro"
 output_directory = "./models/python"
 
-files = Path(input_directory).glob('*schema.json')
+files = Path(input_directory).glob('**/*Schema.json')
 for file in files:
     print(f'opening {file}...')
     schema_file = open(file)

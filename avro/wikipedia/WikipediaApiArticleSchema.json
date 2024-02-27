@@ -1,0 +1,10 @@
+{
+  "namespace": "data_ingest",
+  "type": "record",
+  "name": "WikipediaApiArticle",
+  "fields": [
+    {"name":  "text", "type":  "string"},
+    {"name":  "title", "type":  "string"},
+    {"name":  "tag", "type":  "string"}
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "namespace": "data_ingest",
   "type": "record",
-  "name": "nyt_api_topstories_document",
+  "name": "NYTimesApiTopStoriesDocument",
   "fields": [
     {"name": "section", "type": "string"},
     {"name": "subsection", "type": ["null", "string"]},

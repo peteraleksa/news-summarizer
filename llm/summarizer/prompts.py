@@ -1,6 +1,6 @@
 MAP_TEMPLATE = """The following is a set of documents
 {docs}
-Based on this list of docs, please identify the main themes.
+Based on this list of docs, please summarize the contents.
 Helpful Answer:"""
 
 REDUCE_TEMPLATE = """The following is set of summaries:

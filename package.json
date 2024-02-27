@@ -1,7 +1,13 @@
 {
   "devDependencies": {
-    "@types/node": "^20.11.17"
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.4",
+    "@graphql-codegen/typescript-operations": "^4.1.2",
+    "@graphql-codegen/typescript-resolvers": "^4.0.4",
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1"
   },
+  "type": "module",
   "name": "news-summarizer",
   "description": "",
   "version": "0.1.0",
@@ -10,10 +16,24 @@
     "test": "test"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.4",
+    "@apollo/server": "^4.10.0",
+    "@neo4j/graphql": "^4.4.5",
+    "avro-typescript": "^1.1.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.4.4",
+    "graphql": "^16.8.1",
+    "graphql-scalars": "^1.22.4",
+    "neo4j-driver": "^5.17.0",
+    "puppeteer": "^22.0.0",
     "undici-types": "^5.26.5"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "avro-gen": "npx tsx ./.dev/generate_typescript_classes_from_avro.ts",
+    "gql-gen": "graphql-codegen --config codegen.yml",
+    "compile": "npm run gql-gen && npm run avro-gen && tsc",
+    "start": "npm run compile && node ./dist/index.js"
   },
   "repository": {
     "type": "git",

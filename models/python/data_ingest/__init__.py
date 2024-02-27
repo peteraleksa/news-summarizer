@@ -1,4 +1,4 @@
-from ..schema_classes import nyt_api_topstories_documentClass
+from ..schema_classes import NYTimesApiTopStoriesDocumentClass
 
 
-nyt_api_topstories_document = nyt_api_topstories_documentClass
+NYTimesApiTopStoriesDocument = NYTimesApiTopStoriesDocumentClass
