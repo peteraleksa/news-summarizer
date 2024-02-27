@@ -1,0 +1,33 @@
+apiVersion: sources.knative.dev/v1beta1
+kind: KafkaSource
+metadata:
+  name: wikipedia-article-summarizer
+  namespace: default
+spec:
+  consumerGroup: summarize-wikipedia-article
+  bootstrapServers:
+    - pkc-419q3.us-east4.gcp.confluent.cloud:9092
+  net:
+    sasl:
+      enable: true
+      user:
+        secretKeyRef:
+          name: ccloud
+          key: user
+      password:
+        secretKeyRef:
+          name: ccloud
+          key: password
+    tls:
+      enable: true
+      caCert:
+        secretKeyRef:
+          name: ccloud
+          key: ca.cert
+  topics:
+    - ingest.wikipedia.article
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: event-display
