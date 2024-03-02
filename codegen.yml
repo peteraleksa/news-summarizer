@@ -11,3 +11,8 @@ generates:
     config:
       useIndexSignature: true
 #      contextType: "../index#MyContext"
+      scalars:
+        JSON: string
+        UUID: string
+        Date: string
+        DateTime: string

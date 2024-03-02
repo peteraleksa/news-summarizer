@@ -1,5 +1,8 @@
 # noinspection GraphQLMissingType,GraphQLUnresolvedReference
 
+scalar DateTime
+scalar Date
+
 union Entity = Organization | Person
 union Asset = Organization | MediaChannel
 
@@ -73,7 +76,7 @@ type Person implements GraphNode {
     aka: [String]
     emails: [String]
     dob: Date
-    bio: Text
+    bio: String
     wiki_tag: String
     affiliations: [Organization!]! @relationship(type: "MEMBER_OF", properties: "MembershipInfo", direction: OUT)
     education: [Organization!]! @relationship(type: "STUDIED_AT", properties: "EducationInfo", direction: OUT)
@@ -107,7 +110,7 @@ interface AssociationInfo @relationshipProperties {
 }
 
 interface DistributionInfo @relationshipProperties {
-    date: Int!
+    date: DateTime!
     url: String!
 }
 
@@ -137,8 +140,8 @@ interface MentionInfo @relationshipProperties {
 
 interface OwnershipInfo @relationshipProperties {
     details: String
-    start_dt: Date
-    end_dt: Date
+    start_dt: DateTime
+    end_dt: DateTime
 }
 
 interface SimilarityInfo @relationshipProperties {
@@ -147,5 +150,5 @@ interface SimilarityInfo @relationshipProperties {
 
 interface UserInfo @relationshipProperties {
     details: String
-    user_since: Date
+    user_since: DateTime
 }
