@@ -1,8 +1,5 @@
 # noinspection GraphQLMissingType,GraphQLUnresolvedReference
 
-scalar DateTime
-scalar Date
-
 union Entity = Organization | Person
 union Asset = Organization | MediaChannel
 
@@ -45,11 +42,12 @@ type MediaChannel implements GraphNode {
     name: String!
     category: String
     wiki_tag: String
+    ticker_symbol: String @unique
+    exchange: String
     owners: [Entity!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
-#    current_owners: [Entity!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
-#    former_owners: [Entity!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
     advertisers: [Organization!]! @relationship(type: "ADVERTISES_IN", properties: "AdvertisingInfo", direction: IN)
     users: [User!]! @relationship(type: "USER_OF", properties: "UserInfo", direction: IN)
+    employees: [Person!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: IN)
 }
 
 type Organization implements GraphNode {
@@ -57,17 +55,13 @@ type Organization implements GraphNode {
     name: String!
     category: String!
     wiki_tag: String
+    ticker_symbol: String @unique
+    exchange: String
     subsidiary_of: [Organization!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: IN)
-    subsidiaries: [Organization!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: OUT)
+    subsidiaries: [Asset!]! @relationship(type: "OWNERSHIP_OF", properties: "OwnershipInfo", direction: OUT)
     employees: [Person!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: IN)
-    investors: [Person!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: IN)
+    investors: [Entity!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: IN)
     investments: [Asset!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: OUT)
-#    current_employees: [Person!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: IN)
-#    former_employees: [Person!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: IN)
-#    current_investors: [Person!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: IN)
-#    former_investors: [Person!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: IN)
-#    current_investments: [Asset!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: OUT)
-#    former_investments: [Asset!]! @relationship(type: "INVESTED_IN", properties: "InvestmentInfo", direction: OUT)
 }
 
 type Person implements GraphNode {
@@ -77,7 +71,8 @@ type Person implements GraphNode {
     emails: [String]
     dob: Date
     bio: String
-    wiki_tag: String
+    wiki_tag: String @unique
+    byline_tag: String @unique
     affiliations: [Organization!]! @relationship(type: "MEMBER_OF", properties: "MembershipInfo", direction: OUT)
     education: [Organization!]! @relationship(type: "STUDIED_AT", properties: "EducationInfo", direction: OUT)
     employment: [Organization!]! @relationship(type: "EMPLOYED_AT", properties: "EmploymentInfo", direction: OUT)
@@ -96,59 +91,70 @@ type PoliticalPosition implements GraphNode {
 
 type User implements GraphNode {
     id: ID! @id @unique
+    platform_user: String! @unique
     username: String!
     platform: [MediaChannel!]! @relationship(type: "USER_OF", properties: "UserInfo" direction: OUT)
     owner: [Entity!]! @relationship(type: "OWNER_OF", properties: "OwnershipInfo", direction: IN)
 }
 
-interface AdvertisingInfo @relationshipProperties {
+type AdvertisingInfo @relationshipProperties {
     details: String
 }
 
-interface AssociationInfo @relationshipProperties {
+type AssociationInfo @relationshipProperties {
     details: String
+    weight: Float
 }
 
-interface DistributionInfo @relationshipProperties {
+type DistributionInfo @relationshipProperties {
     date: DateTime!
     url: String!
 }
 
-interface EducationInfo @relationshipProperties {
+type EducationInfo @relationshipProperties {
     degree: String
     start_dt: Int
     end_dt: Int
 }
 
-interface EmploymentInfo @relationshipProperties {
+type EmploymentInfo @relationshipProperties {
     position: String
     start_dt: Int
     end_dt: Int
 }
 
-interface InvestmentInfo @relationshipProperties {
+type InvestmentInfo @relationshipProperties {
     amount: Float
     start_dt: Int
     end_dt: Int
     notes: String
 }
 
-interface MentionInfo @relationshipProperties {
-    sentiment: String
-    snippets: [String]
+type MembershipInfo @relationshipProperties {
+    details: String
+    start_dt: Date
+    end_dt: Date
 }
 
-interface OwnershipInfo @relationshipProperties {
+type MentionInfo @relationshipProperties {
+    sentiment: String
+    snippets: [String]
+    weight: Float
+}
+
+type OwnershipInfo @relationshipProperties {
     details: String
     start_dt: DateTime
     end_dt: DateTime
+    weight: Float
 }
 
-interface SimilarityInfo @relationshipProperties {
+type SimilarityInfo @relationshipProperties {
     details: String
+    weight: Float
 }
 
-interface UserInfo @relationshipProperties {
+type UserInfo @relationshipProperties {
     details: String
     user_since: DateTime
 }

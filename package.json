@@ -18,7 +18,9 @@
   "dependencies": {
     "@apollo/client": "^3.9.4",
     "@apollo/server": "^4.10.0",
-    "@neo4j/graphql": "^4.4.5",
+    "@eddeee888/gcg-typescript-resolver-files": "^0.7.2",
+    "@neo4j/graphql": "^5.0",
+    "@neo4j/graphql-ogm": "^5.0.1",
     "avro-typescript": "^1.1.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.4",
@@ -31,7 +33,7 @@
   "scripts": {
     "test": "mocha",
     "avro-gen": "npx tsx ./.dev/generate_typescript_classes_from_avro.ts",
-    "gql-gen": "graphql-codegen --config codegen.yml",
+    "gql-gen": "graphql-codegen --config codegen.ts",
     "compile": "npm run gql-gen && npm run avro-gen && tsc",
     "start": "npm run compile && node ./dist/index.js"
   },
