@@ -7,6 +7,7 @@ from pprint import pprint
 
 GPT_3_MODEL = "gpt-3.5-turbo-0125"
 GPT_4_MODEL = "gpt-4"
+GPT_4_TURBO_MODEL = "gpt-4-turbo-preview"
 
 TEST_TEXT = """
 Like a lot of explosive financial scandals, the story of Michael Quinn and Brendan Cahill could fairly be described as a simple proposition that spun completely out of control.
@@ -76,7 +77,7 @@ Then, in early September, the fixer called me to say that he had learned from a 
 The fact that the small-time local bureaucrat — and not the investors or the lawyers — had suffered the most severely spoke to the real-life consequences of financial fraud, which often seems so abstract and opaque. I went back to the court records to reread Taiga’s texts. I found the familiar flagrant corruption. But in light of her death, I also saw a side that seemed painfully trusting. In 2014, she texted Cahill excitedly, dreaming of the windfall that would never come. “I keep remembering Papa telling me Grace u will be so wealthy,” she wrote, using her nickname for Quinn. “u will travel all over d world.” Taiga made the smallest gain and paid the highest price. 
 """
 
-llm = ChatOpenAI(model=GPT_4_MODEL, temperature=0.3)
+llm = ChatOpenAI(model=GPT_4_TURBO_MODEL, temperature=0.3)
 template = """
 Use the given format to extract information from the following input: {input}. Make sure to answer in the correct format
 """
@@ -85,9 +86,20 @@ prompt = PromptTemplate(template=template, input_variables=["input"])
 json_schema = {
     "type": "object",
     "properties": {
-        "summary": {"title": "Summary", "description": "The article summary", "type": "string"},
-        "entities": {"title": "Entities", "description": "People, companies, governmental bodies, etc mentioned in the article", "type": "string"},
-        "sentiments": {"title": "Sentiments", "description": "The sentiment for each of the entities in the article", "type": "string"}
+        "summary": {
+            "title": "Summary",
+            "description": "The article summary", "type": "string"
+        },
+        "entities": {
+            "title": "Entities",
+            "description": "People, companies, governmental bodies, and other important entities mentioned in the article",
+            "type": "string"
+        },
+        "sentiments": {
+            "title": "Sentiments",
+            "description": "The sentiment for each of the entities in the article",
+            "type": "string"
+        }
     },
     "required": ["summary", "entities", "sentiments"],
 }
